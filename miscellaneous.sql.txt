@@ -1,0 +1,77 @@
+#This file contains SQL queries I used to debug and analyze the data set but not implemented in the final project
+
+
+#Checking for inconsistencies in the database
+SELECT 
+	COUNT(session_id) 
+FROM 
+	SESSIONS 
+WHERE 
+	SESSION_PROJECTS_ADDED>0 AND PROJECTS_ADDED='FALSE' OR SESSION_PROJECTS_ADDED=0 AND PROJECTS_ADDED='TRUE';
+
+
+#Sort customers by distinct number of login dates
+SELECT customer_id, COUNT(DISTINCT login_date) 
+FROM
+	SESSIONS
+GROUP BY
+	customer_id
+ORDER BY
+	COUNT(DISTINCT login_date) DESC;
+
+
+#Sort customers by active engagement
+SELECT 
+	customer_id, SUM(session_projects_added+session_likes_given+session_comments_given) as active_engage
+FROM
+	SESSIONS
+GROUP BY
+	customer_id
+ORDER BY 
+	active_engage DESC;
+
+
+
+#Sort customers by session duration
+SELECT 
+	customer_id, SUM(session_duration)
+FROM
+	SESSIONS
+GROUP BY
+	customer_id
+ORDER BY 
+	SUM(session_duration) DESC;
+
+
+
+#Sort customers by inactive duration
+SELECT 
+	customer_id, SUM(inactive_duration)
+FROM
+	SESSIONS
+GROUP BY
+	customer_id
+ORDER BY 
+	SUM(inactive_duration) DESC;
+
+
+#Sort customers by inactive duration
+SELECT 
+	customer_id, SUM(session_duration-inactive_duration) as passive_engage
+FROM
+	SESSIONS
+GROUP BY
+	customer_id
+ORDER BY 
+	passive_engage DESC;
+
+
+#Sort customers by subtracting inactive duration from session duration, was not implemented in final sql query
+SELECT 
+	customer_id, SUM(session_duration-inactive_duration) as passive_engage
+FROM
+	SESSIONS
+GROUP BY
+	customer_id
+ORDER BY 
+	passive_engage DESC;
